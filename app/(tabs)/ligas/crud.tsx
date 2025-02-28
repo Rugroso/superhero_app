@@ -9,11 +9,16 @@ import DLeague from '@/components/CRUD/Ligas/DLeague';
 export default function HomeScreen() {
   const route = useRoute();
   const [category, setCategory] = React.useState('');
+  
+  
   React.useEffect(() => {
     const { categoryParam } = route.params as { categoryParam: string };
     console.log("categoryParam:", categoryParam);
+    setCategory(categoryParam);
+
   }
   , []);
+
   return (
     <ScrollView style={styles.scrollContainer}>
         <View> 

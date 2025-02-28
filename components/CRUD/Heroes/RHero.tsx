@@ -26,7 +26,6 @@ export default function CHero() {
             });
     }, []);
 
-    // Filtrar superhéroes según el texto de búsqueda
     const filteredSuperheroes = superheroes.filter(superhero =>
         superhero.nombre.toLowerCase().includes(searchQuery.toLowerCase()) ||
         superhero.identidad_secreta.toLowerCase().includes(searchQuery.toLowerCase()) ||

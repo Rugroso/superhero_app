@@ -1,9 +1,8 @@
-import { Image, StyleSheet, Platform, View, Text, ScrollView, TouchableOpacity} from 'react-native';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity} from 'react-native';
 import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {
   const router = useRouter();
-
   return (
     <ScrollView style={styles.scrollContainer}>
         <View style={styles.headContainer}>
@@ -12,24 +11,26 @@ export default function HomeScreen() {
             </Text>
         </View>
         <View style={[styles.upperLeagueContainer]}>
-          <TouchableOpacity style={[styles.leagueContainer]} onPress={() => router.push('/(tabs)/superheroes/crud')}>
+    
+
+          <TouchableOpacity style={[styles.leagueContainer]} onPress={() => router.push({ pathname: "/(tabs)/ligas/crud", params: { categoryParam: 'consultar' } })}>
               <Text style={[styles.centralText]}>
                 Consultar una Liga
               </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.leagueContainer]} onPress={() => router.push('/(tabs)/superheroes/crud')}>
+          <TouchableOpacity style={[styles.leagueContainer]} onPress={() => router.push({ pathname: "/(tabs)/ligas/crud", params: { categoryParam: 'editar' } })}>
               <Text style={[styles.centralText]}>
                 Editar una Liga
               </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.leagueContainer]} onPress={() => router.push('/(tabs)/superheroes/crud')}>
+          <TouchableOpacity style={[styles.leagueContainer]} onPress={() => router.push({ pathname: "/(tabs)/ligas/crud", params: { categoryParam: 'crear' } })}>
               <Text style={[styles.centralText]}>
                 Crear una Liga
               </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.leagueContainer]} onPress={() => router.push('/(tabs)/superheroes/crud')}>
+          <TouchableOpacity style={[styles.leagueContainer]} onPress={() => router.push({ pathname: "/(tabs)/ligas/crud", params: { categoryParam: 'eliminar' } })}>
               <Text style={[styles.centralText]}>
-                Eliminar una Liga
+                Eliminar Liga
               </Text>
           </TouchableOpacity>
         </View>
