@@ -16,7 +16,7 @@ export default function CHero() {
   const [searchQuery, setSearchQuery] = React.useState('');
 
   React.useEffect(() => {
-    fetch('http://10.4.94.184:3001/api/superhero')
+    fetch('http://localhost:3000/api/superhero')
       .then(response => response.json())
       .then(data => {
         setSuperheroes(data);
@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 20,
+    paddingBottom:80
   },
   headerContainer: {
     alignItems: 'center',
@@ -104,9 +105,15 @@ const styles = StyleSheet.create({
   heroContainer: {
     padding: 15,
     marginBottom: 10,
-    backgroundColor: 'rgba(245, 245, 245, 0.95)',
+    backgroundColor: 'rgba(245, 245, 245, 1)',
     borderRadius: 10,
-    elevation: 3,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 5, 
   },
   heroName: {
     fontSize: 18,

@@ -6,24 +6,24 @@ import { LinearGradient } from 'expo-linear-gradient';
 export default function CHero() {
   const [nombre, setNombre] = React.useState("");
   const [edad, setEdad] = React.useState("");
-  const [liga, setLiga] = React.useState("");
+  const [identidadSecreta, setIdentidadSecreta] = React.useState("");
   const [poderes, setPoderes] = React.useState("");
 
   const registrarHeroe = () => {
-    console.log("Nombre: " + nombre);
-    console.log("Edad: " + edad);
-    console.log("Liga: " + liga);
-    console.log("Poderes: " + poderes);
-    fetch('http://localhost:3000/superheroes', {
+    console.log("Nombre:", nombre);
+    console.log("Edad:", edad);
+    console.log("Identidad Secreta:", identidadSecreta);
+    console.log("Poderes:", poderes);
+    fetch('http://localhost:3000/api/superhero', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         nombre: nombre,
-        edad: edad,
-        liga: liga,
-        poderes: poderes
+        edad: parseInt(edad),
+        identidad_secreta: identidadSecreta,
+        poderes: poderes.split(',').map(p => p.trim())
       })
     })
       .then(response => response.json())
@@ -55,15 +55,15 @@ export default function CHero() {
               mode="outlined"
               label="Nombre"
               value={nombre}
-              onChangeText={text => setNombre(text)}
+              onChangeText={setNombre}
             />
           </View>
           <View style={styles.inputContainer}>
             <TextInput
               mode="outlined"
-              label="Liga"
-              value={liga}
-              onChangeText={text => setLiga(text)}
+              label="Identidad Secreta"
+              value={identidadSecreta}
+              onChangeText={setIdentidadSecreta}
             />
           </View>
           <View style={styles.inputContainer}>
@@ -71,7 +71,8 @@ export default function CHero() {
               mode="outlined"
               label="Edad"
               value={edad}
-              onChangeText={text => setEdad(text)}
+              onChangeText={setEdad}
+              keyboardType="numeric"
             />
           </View>
           <Text style={styles.poderText}>Separa los poderes por comas</Text>
@@ -80,7 +81,7 @@ export default function CHero() {
               mode="outlined"
               label="Poderes"
               value={poderes}
-              onChangeText={text => setPoderes(text)}
+              onChangeText={setPoderes}
             />
           </View>
           <TouchableOpacity style={styles.button} onPress={registrarHeroe}>
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
     color: '#ffffff',
   },
   formContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     padding: 20,
     borderRadius: 15,
   },

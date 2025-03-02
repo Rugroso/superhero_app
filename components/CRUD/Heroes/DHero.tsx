@@ -11,14 +11,14 @@ interface Superhero {
   poderes: string[];
 }
 
-export default function CHero() {
+export default function DHero() {
   const [heroes, setHeroes] = useState<Superhero[]>([]);
   const [open, setOpen] = useState(false);
   const [selectedHero, setSelectedHero] = useState<string>('');
   const [items, setItems] = useState<{ label: string; value: string }[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/superheroes')
+    fetch('http://localhost:3000/api/superhero')
       .then(response => response.json())
       .then((data: Superhero[]) => {
         setHeroes(data);
@@ -41,7 +41,7 @@ export default function CHero() {
       Alert.alert('Seleccione un héroe para eliminar');
       return;
     }
-    fetch(`http://localhost:3000/superheroes/${selectedHero}`, {
+    fetch(`http://localhost:3000/api/superhero/${selectedHero}`, {
       method: 'DELETE',
     })
       .then(response => {
