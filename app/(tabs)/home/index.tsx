@@ -1,8 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {
+  const router = useRouter()
   return (
     <LinearGradient colors={['#0f0c29', '#302b63', '#24243e']} style={styles.background}>
       <SafeAreaView style={styles.container}>
@@ -11,10 +13,10 @@ export default function HomeScreen() {
           <Text style={styles.subtitle}>Elige tu equipo</Text>
         </View>
         <View style={styles.buttonsContainer}>
-          <TouchableOpacity style={[styles.button, { backgroundColor: '#e50914' }]}>
+          <TouchableOpacity style={[styles.button, { backgroundColor: '#e50914' }]} onPress={() => router.push('/(tabs)/home/marvel')}>
             <Text style={styles.buttonText}>Marvel</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, { backgroundColor: '#1b1f3b' }]}>
+          <TouchableOpacity style={[styles.button, { backgroundColor: '#1b1f3b' }]} onPress={() => router.push('/(tabs)/home/dc')}>
             <Text style={styles.buttonText}>DC</Text>
           </TouchableOpacity>
         </View>
