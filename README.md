@@ -1,50 +1,48 @@
-# Welcome to your Expo app 👋
+A mobile application built with React Native and Expo for managing and displaying superheroes and leagues. This frontend communicates with a separate backend API (hosted on GitHub) to perform CRUD operations and retrieve data.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Features
+	•	User Interface:
+	•	Modern UI using LinearGradient backgrounds and custom components.
+	•	Haptic feedback on tab navigation.
+	•	Custom dropdowns for selecting superheroes.
+	•	Navigation:
+	•	Tab-based navigation implemented using expo-router.
+	•	Screens for home, superheroes, and leagues.
+	•	Data Interaction:
+	•	Create, edit, and delete superheroes using forms.
+	•	View lists of superheroes and leagues.
+	•	The app interacts with a backend API (separate repository) for data management.
 
-## Get started
+ Prerequisites
+	•	Node.js (v14 or above)
+	•	npm or yarn
+	•	Expo CLI for mobile development
 
-1. Install dependencies
-
-   ```bash
+1. Installation
+   git clone <FRONTEND_REPOSITORY_URL>
+   cd SuperheroMobile
+   
+2. Install dependencies:
    npm install
-   ```
+   # or
+   yarn install
 
-2. Start the app
+3.	Configure Backend API:
+The app is designed to interact with a separate backend API (see Backend Repository). Ensure that the backend is running and accessible (typically via http://localhost:3000) or update the API URLs in your code accordingly.
 
-   ```bash
-    npx expo start
-   ```
+4.	Start the app with Expo:
+   npx expo start
 
-In the output, you'll find options to open the app in a
+his command will open the Expo Developer Tools. You can run the app on an Android/iOS emulator or on a physical device using the Expo Go app.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Usage
+	•	Register Superhero:
+Use the provided form to enter superhero details and register new heroes.
+	•	Edit or Delete Superhero:
+Use dropdown selectors and forms to update or remove existing heroes.
+	•	View Data:
+Browse through lists of superheroes and leagues.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+License
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+This project is licensed under the MIT License. See the LICENSE file for details.
