@@ -1,67 +1,73 @@
-import {StyleSheet, View, Text, ScrollView, TouchableOpacity} from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function HomeScreen() {
   return (
-    <ScrollView style={styles.scrollContainer}>
-        <View style={styles.headContainer}>
-            <Text style={styles.centralText}>
-                Bienvenido a la Liga de Heroes
-            </Text>
+    <LinearGradient colors={['#0f0c29', '#302b63', '#24243e']} style={styles.background}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.title}>Liga de Heroes</Text>
+          <Text style={styles.subtitle}>Elige tu equipo</Text>
         </View>
-        <View style={[styles.upperLeagueContainer]}>
-          <TouchableOpacity style={[styles.leagueContainer, , { backgroundColor: "#D40317" }]}>
-              <Text style={[styles.centralText, {color: "#fff"}]}>
-                  Marvel
-              </Text>
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity style={[styles.button, { backgroundColor: '#e50914' }]}>
+            <Text style={styles.buttonText}>Marvel</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.leagueContainer, , { backgroundColor: "#010101" }]}>
-              <Text style={[styles.centralText, {color: "#fff"}]}>
-                  DC
-              </Text>
+          <TouchableOpacity style={[styles.button, { backgroundColor: '#1b1f3b' }]}>
+            <Text style={styles.buttonText}>DC</Text>
           </TouchableOpacity>
         </View>
-       
-    </ScrollView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollContainer: {
-    display : 'flex',
-    backgroundColor: '#fff',
+  background: {
+    flex: 1,
   },
-  headContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
+  container: {
+    flex: 1,
     justifyContent: 'center',
-    height: 220,
-    backgroundColor: '#d4d2cd',
-    borderRadius: 10,
+    paddingHorizontal: 20,
+    marginTop: -150,
   },
-  upperLeagueContainer: {
-    display: 'flex',
-    flexDirection: 'row',
+  headerContainer: {
+    marginBottom: 40,
     alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 25,
-    flexWrap: 'wrap'
   },
-  leagueContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 130,
-    width: 200,
-    backgroundColor: '#d4d2cd',
-    borderRadius: 25,
-    margin: 10
-  },
-  centralText: {
-    fontSize: 24,
+  title: {
+    fontSize: 32,
     fontWeight: 'bold',
-    textAlign: 'center',
-    padding: 20,
-  }
+    color: '#ffffff',
+  },
+  subtitle: {
+    fontSize: 18,
+    color: '#d1d1d1',
+    marginTop: 10,
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  button: {
+    flex: 1,
+    height: 100,
+    borderRadius: 20,
+    marginHorizontal: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
+  },
+  buttonText: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: '#fff',
+  },
 });

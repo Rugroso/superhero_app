@@ -1,6 +1,8 @@
-import { Image, StyleSheet, Platform, View, Text, ScrollView, TouchableOpacity} from 'react-native'
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import { ScrollView } from 'react-native-virtualized-view';
 import { useRoute } from '@react-navigation/native';
-import React from 'react'; 
+import { LinearGradient } from 'expo-linear-gradient';
 import CHero from '@/components/CRUD/Heroes/CHero';
 import RHero from '@/components/CRUD/Heroes/RHero';
 import UHero from '@/components/CRUD/Heroes/UHero';
@@ -9,60 +11,53 @@ import DHero from '@/components/CRUD/Heroes/DHero';
 export default function HomeScreen() {
   const route = useRoute();
   const [category, setCategory] = React.useState('');
+
   React.useEffect(() => {
     const { categoryParam } = route.params as { categoryParam: string };
     console.log("categoryParam:", categoryParam);
     setCategory(categoryParam);
-  }
-  , []);
+  }, []);
+
   return (
-    <ScrollView style={styles.scrollContainer}>
-        <View> 
-          {category === 'consultar' && <RHero></RHero>}
-          {category === 'editar' && <UHero></UHero>}
-          {category === 'crear' && <CHero></CHero>}
-          {category === 'eliminar' && <DHero></DHero>}
+    <LinearGradient colors={['#0f0c29', '#302b63', '#24243e']} style={styles.background}>
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerTitle}>Gestión de Héroes</Text>
         </View>
-    </ScrollView>
+        <View style={styles.contentContainer}>
+          {category === 'consultar' && <RHero />}
+          {category === 'editar' && <UHero />}
+          {category === 'crear' && <CHero />}
+          {category === 'eliminar' && <DHero />}
+        </View>
+      </View>
+    </LinearGradient>
   );
 }
+
 const styles = StyleSheet.create({
-  scrollContainer: {
-    display : 'flex',
-    backgroundColor: '#fff',
+  background: {
+    flex: 1,
   },
-  headContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 220,
-    backgroundColor: '#d4d2cd',
-    borderRadius: 10,
-  },
-  upperLeagueContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 25,
-    flexWrap: 'wrap'
-  },
-  leagueContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 130,
-    width: 200,
-    backgroundColor: '#d4d2cd',
-    borderRadius: 25,
-    margin: 10
-  },
-  centralText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
+  container: {
+    flexGrow: 1,
     padding: 20,
-  }
+  },
+  headerContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  headerTitle: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#ffffff',
+  },
+  headerSubtitle: {
+    fontSize: 16,
+    color: '#d1d1d1',
+    marginTop: 5,
+  },
+  contentContainer: {
+    flex: 1,
+  },
 });

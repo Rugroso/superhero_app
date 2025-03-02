@@ -1,7 +1,6 @@
-import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import React from 'react';
 import { Searchbar } from 'react-native-paper';
-import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 
 interface Superhero {
     _id: string;
@@ -12,7 +11,7 @@ interface Superhero {
 }
 
 export default function RLeague() {
-    const [superheroes, setSuperheroes] = React.useState([] as Superhero[]);
+    const [superheroes, setSuperheroes] = React.useState<Superhero[]>([]);
     const [searchQuery, setSearchQuery] = React.useState('');
 
     React.useEffect(() => {
@@ -33,9 +32,7 @@ export default function RLeague() {
     );
 
     return (
-      <SafeAreaProvider>
-      <SafeAreaView>
-        <ScrollView  style={styles.scrollContainer}>
+        <View  style={styles.scrollContainer}>
             <View>
                 <Text style={styles.centralText}>  
                     Hora de consultar una liga
@@ -62,9 +59,7 @@ export default function RLeague() {
                     <Text style={styles.noResults}>No se encontraron superhéroes</Text>
                 )}
             </View>
-        </ScrollView>
-        </SafeAreaView>
-        </SafeAreaProvider>
+        </View>
 
     );
 }

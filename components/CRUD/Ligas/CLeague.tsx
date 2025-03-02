@@ -1,7 +1,6 @@
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import React from 'react';
 import { Searchbar } from 'react-native-paper';
-import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 
 interface Superhero {
     _id: string;
@@ -33,9 +32,7 @@ export default function CHero() {
     );
 
     return (
-      <SafeAreaProvider>
-      <SafeAreaView>
-        <ScrollView  style={styles.scrollContainer}>
+        <View  style={styles.scrollContainer}>
             <View>
                 <Text style={styles.centralText}>  
                     Hora de consultar una liga
@@ -62,10 +59,7 @@ export default function CHero() {
                     <Text style={styles.noResults}>No se encontraron superhéroes</Text>
                 )}
             </View>
-        </ScrollView>
-        </SafeAreaView>
-        </SafeAreaProvider>
-
+        </View>
     );
 }
 

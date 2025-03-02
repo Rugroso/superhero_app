@@ -8,50 +8,50 @@ export default function CHero() {
     const [liga, setLiga] = React.useState("");
     const [poderes, setPoderes] = React.useState("");
   return (
-    <ScrollView style={styles.scrollContainer}>
-    <View>
-        <View> 
-            <Text style={styles.centralText}>  
-                Hora de modificar los datos de un superheroe
-            </Text>
-        </View>
-        <View style={styles.inputContainer}>  
-            <TextInput
-            mode= 'outlined'
-            label="Nombre"
-            value={nombre}
-            onChangeText={text => setNombre(text)}
-            />
-        </View>
-        <View style={styles.inputContainer}>  
-            <TextInput
-            mode= 'outlined'
-            label="Liga"
-            value={liga}
-            onChangeText={text => setLiga(text)}
-            />
-        </View>
-        <View style={styles.inputContainer}>  
-            <TextInput
-            mode= 'outlined'
-            label="Edad"
-            value={edad}
-            onChangeText={text => setEdad(text)}
-            />
-        </View>
-        <Text style={styles.poderText}> 
-            Separa los poderes por comas
-        </Text>
-        <View style={styles.inputContainer}>  
-            <TextInput
-            mode= 'outlined'
-            label="Poderes"
-            value={poderes}
-            onChangeText={text => setPoderes(text)}
-            />
-        </View>
+    <View style={styles.scrollContainer}>
+      <View>
+          <View> 
+              <Text style={styles.centralText}>  
+                  Hora de modificar los datos de un superheroe
+              </Text>
+          </View>
+          <View style={styles.inputContainer}>  
+              <TextInput
+              mode= 'outlined'
+              label="Nombre"
+              value={nombre}
+              onChangeText={text => setNombre(text)}
+              />
+          </View>
+          <View style={styles.inputContainer}>  
+              <TextInput
+              mode= 'outlined'
+              label="Liga"
+              value={liga}
+              onChangeText={text => setLiga(text)}
+              />
+          </View>
+          <View style={styles.inputContainer}>  
+              <TextInput
+              mode= 'outlined'
+              label="Edad"
+              value={edad}
+              onChangeText={text => setEdad(text)}
+              />
+          </View>
+          <Text style={styles.poderText}> 
+              Separa los poderes por comas
+          </Text>
+          <View style={styles.inputContainer}>  
+              <TextInput
+              mode= 'outlined'
+              label="Poderes"
+              value={poderes}
+              onChangeText={text => setPoderes(text)}
+              />
+          </View>
+      </View>
     </View>
-    </ScrollView>
   );
 }
 const styles = StyleSheet.create({

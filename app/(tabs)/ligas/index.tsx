@@ -1,79 +1,107 @@
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity} from 'react-native';
+import React from 'react';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function HomeScreen() {
   const router = useRouter();
   return (
-    <ScrollView style={styles.scrollContainer}>
-        <View style={styles.headContainer}>
-            <Text style={styles.centralText}>
-                Gestión de Ligas
-            </Text>
+    <LinearGradient colors={['#0f0c29', '#302b63', '#24243e']} style={styles.background}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerTitle}>Gestión de Ligas</Text>
         </View>
-        <View style={[styles.upperLeagueContainer]}>
-    
-
-          <TouchableOpacity style={[styles.leagueContainer]} onPress={() => router.push({ pathname: "/(tabs)/ligas/crud", params: { categoryParam: 'consultar' } })}>
-              <Text style={[styles.centralText]}>
-                Consultar una Liga
-              </Text>
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() =>
+              router.push({
+                pathname: "/(tabs)/ligas/crud",
+                params: { categoryParam: 'consultar' }
+              })
+            }
+          >
+            <Text style={styles.buttonText}>Consultar una Liga</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.leagueContainer]} onPress={() => router.push({ pathname: "/(tabs)/ligas/crud", params: { categoryParam: 'editar' } })}>
-              <Text style={[styles.centralText]}>
-                Editar una Liga
-              </Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() =>
+              router.push({
+                pathname: "/(tabs)/ligas/crud",
+                params: { categoryParam: 'editar' }
+              })
+            }
+          >
+            <Text style={styles.buttonText}>Editar una Liga</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.leagueContainer]} onPress={() => router.push({ pathname: "/(tabs)/ligas/crud", params: { categoryParam: 'crear' } })}>
-              <Text style={[styles.centralText]}>
-                Crear una Liga
-              </Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() =>
+              router.push({
+                pathname: "/(tabs)/ligas/crud",
+                params: { categoryParam: 'crear' }
+              })
+            }
+          >
+            <Text style={styles.buttonText}>Crear una Liga</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.leagueContainer]} onPress={() => router.push({ pathname: "/(tabs)/ligas/crud", params: { categoryParam: 'eliminar' } })}>
-              <Text style={[styles.centralText]}>
-                Eliminar Liga
-              </Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() =>
+              router.push({
+                pathname: "/(tabs)/ligas/crud",
+                params: { categoryParam: 'eliminar' }
+              })
+            }
+          >
+            <Text style={styles.buttonText}>Eliminar Liga</Text>
           </TouchableOpacity>
         </View>
-    </ScrollView>
+      </ScrollView>
+    </LinearGradient>
   );
 }
+
 const styles = StyleSheet.create({
-  scrollContainer: {
-    display : 'flex',
-    backgroundColor: '#fff',
+  background: {
+    flex: 1,
   },
-  headContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 220,
-    backgroundColor: '#d4d2cd',
-    borderRadius: 10,
-  },
-  upperLeagueContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 25,
-    flexWrap: 'wrap'
-  },
-  leagueContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 130,
-    width: 200,
-    backgroundColor: '#d4d2cd',
-    borderRadius: 25,
-    margin: 10
-  },
-  centralText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
+  container: {
+    flexGrow: 1,
     padding: 20,
-  }
+  },
+  headerContainer: {
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  headerTitle: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#ffffff',
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+  },
+  button: {
+    backgroundColor: '#1b1f3b',
+    width: '44%',
+    height: 120,
+    borderRadius: 20,
+    margin: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
+  },
+  buttonText: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#fff',
+    textAlign: 'center',
+  },
 });
