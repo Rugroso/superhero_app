@@ -48,7 +48,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="ligas"
         options={{
-          title: 'Leagues',
+          title: 'Ligas',
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="square.grid.2x2.fill" color={color} />
           ),

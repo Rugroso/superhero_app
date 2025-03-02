@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { ScrollView } from 'react-native-virtualized-view';
 import { useRoute } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import CHero from '@/components/CRUD/Heroes/CHero';

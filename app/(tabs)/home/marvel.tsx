@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-// Interfaz para tipar un superhéroe
 interface Superhero {
   _id: string;
   nombre: string;
@@ -11,7 +10,6 @@ interface Superhero {
   poderes: string[];
 }
 
-// Interfaz para tipar la liga
 interface Liga {
   _id: string;
   nombre: string;
@@ -20,7 +18,7 @@ interface Liga {
 
 export default function MarvelLeague() {
   const [liga, setLiga] = useState<Liga | null>(null);
-  const marvelLeagueId = "67c107155b86923173f0f77e"; // Id de la liga Marvel
+  const marvelLeagueId = "67c107155b86923173f0f77e"; 
 
   useEffect(() => {
     fetch(`http://localhost:3000/api/liga/superhero/${marvelLeagueId}`)
