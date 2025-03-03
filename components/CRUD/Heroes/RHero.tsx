@@ -70,6 +70,7 @@ export default function CHero() {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
+    borderRadius: 15,
   },
   container: {
     flexGrow: 1,

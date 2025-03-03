@@ -1,26 +1,31 @@
 import React from 'react';
-import { StyleSheet, Text, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, TouchableOpacity, View, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {
-  const router = useRouter()
+  const router = useRouter();
   return (
     <LinearGradient colors={['#0f0c29', '#302b63', '#24243e']} style={styles.background}>
-      <SafeAreaView style={styles.container}>
-        <View style={styles.headerContainer}>
-          <Text style={styles.title}>Liga de Heroes</Text>
-          <Text style={styles.subtitle}>Elige tu equipo</Text>
-        </View>
-        <View style={styles.buttonsContainer}>
-          <TouchableOpacity style={[styles.button, { backgroundColor: '#e50914' }]} onPress={() => router.push('/(tabs)/home/marvel')}>
-            <Text style={styles.buttonText}>Marvel</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, { backgroundColor: '#1b1f3b' }]} onPress={() => router.push('/(tabs)/home/dc')}>
-            <Text style={styles.buttonText}>DC</Text>
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
+      <ScrollView style={{flex: 1, height: '100%'}} >
+        <SafeAreaView style={styles.container}>
+          <View style={styles.headerContainer}>
+            <Text style={styles.title}>SuperApp</Text>
+            <Text style={styles.subtitle}>Elige tu equipo</Text>
+          </View>
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity style={[styles.button, { backgroundColor: '#e50914' }]} onPress={() => router.push('/(tabs)/home/marvel')}>
+              <Text style={styles.buttonText}>Marvel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.button, { backgroundColor: '#1b1f3b' }]} onPress={() => router.push('/(tabs)/home/dc')}>
+              <Text style={styles.buttonText}>DC</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.imageContainer}>
+            <Image source={require('../../../assets/images/super.png')} style={styles.image} />
+            </View>
+        </SafeAreaView>
+      </ScrollView>
     </LinearGradient>
   );
 }
@@ -28,12 +33,13 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
+    height: '100%',
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     paddingHorizontal: 20,
-    marginTop: -150,
+    marginTop: 70,
   },
   headerContainer: {
     marginBottom: 40,
@@ -71,5 +77,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '600',
     color: '#fff',
+  },
+  imageContainer: {
+    marginTop: 40,
+    alignItems: 'center',
+  },
+  image: {
+    width: '100%',
+    height: 300,
+    borderRadius: 20,
   },
 });
