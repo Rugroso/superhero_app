@@ -56,6 +56,8 @@ export default function CHero() {
               label="Nombre"
               value={nombre}
               onChangeText={setNombre}
+              textColor={'#000000'}
+              theme={{ colors: { text: 'black', primary: '#6200EE', background: 'white' } }}
             />
           </View>
           <View style={styles.inputContainer}>
@@ -64,6 +66,8 @@ export default function CHero() {
               label="Identidad Secreta"
               value={identidadSecreta}
               onChangeText={setIdentidadSecreta}
+              textColor={'#000000'}
+              theme={{ colors: { text: 'black', primary: '#6200EE', background: 'white' } }}
             />
           </View>
           <View style={styles.inputContainer}>
@@ -73,6 +77,8 @@ export default function CHero() {
               value={edad}
               onChangeText={setEdad}
               keyboardType="numeric"
+              textColor={'#000000'}
+              theme={{ colors: { text: 'black', primary: '#6200EE', background: 'white' } }}
             />
           </View>
           <Text style={styles.poderText}>Separa los poderes por comas</Text>
@@ -82,6 +88,8 @@ export default function CHero() {
               label="Poderes"
               value={poderes}
               onChangeText={setPoderes}
+              textColor={'#000000'}
+              theme={{ colors: { text: 'black', primary: '#6200EE', background: 'white' } }}
             />
           </View>
           <TouchableOpacity style={styles.button} onPress={registrarHeroe}>
@@ -96,6 +104,7 @@ export default function CHero() {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
+    borderRadius: 15,
   },
   container: {
     flexGrow: 1,

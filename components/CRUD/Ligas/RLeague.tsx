@@ -39,14 +39,16 @@ export default function CHero() {
           <Text style={styles.headerTitle}>Consultar Superhéroe</Text>
         </View>
         <View style={styles.formContainer}>
-          <View style={styles.searchContainer}>
+            <View style={styles.searchContainer}>
             <Searchbar
               placeholder="Buscar superhéroe..."
               onChangeText={setSearchQuery}
               value={searchQuery}
               style={styles.searchbar}
+              placeholderTextColor="gray"
+              inputStyle={{ color: 'gray' }}
             />
-          </View>
+            </View>
           <View style={styles.heroList}>
             {filteredSuperheroes.length > 0 ? (
               filteredSuperheroes.map((superhero) => (
@@ -70,6 +72,7 @@ export default function CHero() {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
+    borderRadius: 15,
   },
   container: {
     flexGrow: 1,
@@ -93,11 +96,13 @@ const styles = StyleSheet.create({
   searchContainer: {
     marginBottom: 15,
     paddingHorizontal: 10,
+    color: 'white',
   },
   searchbar: {
     elevation: 5,
     borderRadius: 10,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#fff',
+    color: 'white',
   },
   heroList: {
     marginTop: 10,

@@ -4,7 +4,6 @@ import { TextInput } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-// Interfaz para tipar los datos de un superhéroe
 interface Superhero {
   _id: string;
   nombre: string;
@@ -16,16 +15,14 @@ interface Superhero {
 export default function EHero() {
   const [heroes, setHeroes] = useState<Superhero[]>([]);
   const [open, setOpen] = useState(false);
-  const [selectedHero, setSelectedHero] = useState<string>(""); // Guarda el _id del héroe seleccionado
+  const [selectedHero, setSelectedHero] = useState<string>("");
   const [items, setItems] = useState<{ label: string; value: string }[]>([]);
 
-  // Campos del formulario para editar
   const [nombre, setNombre] = useState("");
   const [edad, setEdad] = useState("");
   const [identidadSecreta, setIdentidadSecreta] = useState("");
   const [poderes, setPoderes] = useState("");
 
-  // Cargar la lista de superhéroes
   useEffect(() => {
     fetch('http://localhost:3000/api/superhero')
       .then(response => response.json())
@@ -58,11 +55,6 @@ export default function EHero() {
   }, [selectedHero, heroes]);
 
   const editarHeroe = () => {
-    console.log("ID:", selectedHero);
-    console.log("Nombre:", nombre);
-    console.log("Edad:", edad);
-    console.log("Identidad Secreta:", identidadSecreta);
-    console.log("Poderes:", poderes);
     fetch(`http://localhost:3000/api/superhero/${selectedHero}`, {
       method: 'PUT',
       headers: {
@@ -77,18 +69,10 @@ export default function EHero() {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('Success:', data);
         Alert.alert("Héroe editado con éxito");
       })
       .catch((error) => {
-        console.error('Error:', error);
-        Alert.alert('Error', 'El Héroe no pudo ser editado', [
-          {
-            text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel',
-          },
-        ]);
+        Alert.alert('Error', 'El Héroe no pudo ser editado');
       });
   };
 
@@ -115,8 +99,11 @@ export default function EHero() {
             <TextInput
               mode="outlined"
               label="Nombre"
+              textColor={'#000000'}
+
               value={nombre}
               onChangeText={setNombre}
+              theme={{ colors: { text: '#000000', primary: '#6200EE', background: '#FFFFFF', placeholder: '#000000' } }}
             />
           </View>
           <View style={styles.inputContainer}>
@@ -124,7 +111,9 @@ export default function EHero() {
               mode="outlined"
               label="Identidad Secreta"
               value={identidadSecreta}
+              textColor={'#000000'}
               onChangeText={setIdentidadSecreta}
+              theme={{ colors: {  primary: '#6200EE', background: '#FFFFFF', placeholder: '#000000' } }}
             />
           </View>
           <View style={styles.inputContainer}>
@@ -133,7 +122,9 @@ export default function EHero() {
               label="Edad"
               value={edad}
               onChangeText={setEdad}
+              textColor={'#000000'}
               keyboardType="numeric"
+              theme={{ colors: { text: '#000000', primary: '#6200EE', background: '#FFFFFF', placeholder: '#000000' } }}
             />
           </View>
           <Text style={styles.poderText}>Separa los poderes por comas</Text>
@@ -142,7 +133,9 @@ export default function EHero() {
               mode="outlined"
               label="Poderes"
               value={poderes}
+              textColor={'#000000'}
               onChangeText={setPoderes}
+              theme={{ colors: { text: '#000000', primary: '#6200EE', background: '#FFFFFF', placeholder: '#000000' } }}
             />
           </View>
           <TouchableOpacity style={styles.button} onPress={editarHeroe}>
@@ -157,6 +150,7 @@ export default function EHero() {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
+    borderRadius: 15,
   },
   container: {
     flexGrow: 1,
