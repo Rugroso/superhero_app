@@ -23,7 +23,7 @@ export default function DLiga() {
   const [items, setItems] = useState<{ label: string; value: string }[]>([]);
 
   useEffect(() => {
-    fetch('http://192.168.1.67:3000/api/liga/superhero')
+    fetch('http://10.4.45.152:3000/api/liga/superhero')
       .then(response => response.json())
       .then((data: Liga[]) => {
         setLigas(data);
@@ -47,7 +47,7 @@ export default function DLiga() {
       Alert.alert('Seleccione una liga para eliminar');
       return;
     }
-    fetch(`http://192.168.1.67:3000/api/liga/superhero/${selectedLiga}`, {
+    fetch(`http://10.4.45.152:3000/api/liga/superhero/${selectedLiga}`, {
       method: 'DELETE',
     })
       .then(response => {

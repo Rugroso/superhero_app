@@ -24,7 +24,7 @@ export default function EHero() {
   const [poderes, setPoderes] = useState("");
 
   useEffect(() => {
-    fetch('http://192.168.1.67:3000/api/superhero')
+    fetch('http://10.4.45.152:3000/api/superhero')
       .then(response => response.json())
       .then((data: Superhero[]) => {
         setHeroes(data);
@@ -55,7 +55,7 @@ export default function EHero() {
   }, [selectedHero, heroes]);
 
   const editarHeroe = () => {
-    fetch(`http://localhost:3000/api/superhero/${selectedHero}`, {
+    fetch(`http://10.4.45.152:3000/api/superhero/${selectedHero}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'

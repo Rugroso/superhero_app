@@ -21,7 +21,7 @@ export default function DcLeague() {
   const marvelLeagueId = "67c105c75b86923173f0f76b";
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/liga/superhero/${marvelLeagueId}`)
+    fetch(`http://10.4.45.152:3000/api/liga/superhero/${marvelLeagueId}`)
       .then(response => response.json())
       .then((data: Liga) => {
         setLiga(data);

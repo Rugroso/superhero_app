@@ -16,7 +16,7 @@ export default function CLiga() {
   const [selectedHeroes, setSelectedHeroes] = useState({});
 
   useEffect(() => {
-    fetch("http://192.168.1.67:3000/api/superhero")
+    fetch("http://10.4.45.152:3000/api/superhero")
       .then((response) => response.json())
       .then((data) => {
         setHeroes(data);
@@ -49,7 +49,7 @@ export default function CLiga() {
     }
 
     try {
-      const response = await fetch("http://192.168.1.67:3000/api/liga/superhero", {
+      const response = await fetch("http://10.4.45.152:3000/api/liga/superhero", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombre, miembros: miembrosArray }),

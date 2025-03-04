@@ -19,7 +19,7 @@ export default function HomeScreen() {
 
   return (
     <LinearGradient colors={['#0f0c29', '#302b63', '#24243e']} style={styles.background}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.container}>
         <View style={styles.headerContainer}>
           <Text style={styles.headerTitle}>Gestión de Ligas</Text>
         </View>
@@ -29,7 +29,7 @@ export default function HomeScreen() {
           {category === 'crear' && <CLeague />}
           {category === 'eliminar' && <DLeague />}
         </View>
-      </ScrollView>
+      </View>
     </LinearGradient>
   );
 }

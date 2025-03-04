@@ -23,7 +23,7 @@ export default function CLigas() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("http://192.168.1.67:3000/api/liga/superhero")
+    fetch("http://10.4.45.152:3000/api/liga/superhero")
       .then(async (response) => {
         if (!response.ok) {
           const errorMessage = await response.text();
