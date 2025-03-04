@@ -1,148 +1,113 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
-import { TextInput } from 'react-native-paper';
-import { LinearGradient } from 'expo-linear-gradient';
-import DropDownPicker from 'react-native-dropdown-picker';
+import React, { useEffect, useState } from "react";
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, TextInput, Alert } from "react-native";
+import { Searchbar, Button } from "react-native-paper";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface Superhero {
   _id: string;
   nombre: string;
-  edad: number;
-  identidad_secreta: string;
-  poderes: string[];
 }
 
-export default function EHero() {
-  const [heroes, setHeroes] = useState<Superhero[]>([]);
-  const [open, setOpen] = useState(false);
-  const [selectedHero, setSelectedHero] = useState<string>("");
-  const [items, setItems] = useState<{ label: string; value: string }[]>([]);
+interface Liga {
+  _id: string;
+  nombre: string;
+  miembros: Superhero[];
+}
 
-  const [nombre, setNombre] = useState("");
-  const [edad, setEdad] = useState("");
-  const [identidadSecreta, setIdentidadSecreta] = useState("");
-  const [poderes, setPoderes] = useState("");
+export default function EditarLiga() {
+  const [ligas, setLigas] = useState<Liga[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedLiga, setSelectedLiga] = useState<Liga | null>(null);
+  const [newHero, setNewHero] = useState<string>("");
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/superhero')
-      .then(response => response.json())
-      .then((data: Superhero[]) => {
-        setHeroes(data);
-        const mappedItems = data.map(hero => ({
-          label: hero.nombre,
-          value: hero._id,
-        }));
-        setItems(mappedItems);
-        if (mappedItems.length > 0) {
-          setSelectedHero(mappedItems[0].value);
-        }
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    fetch("http://192.168.1.67:3000/api/liga/superhero")
+      .then((response) => response.json())
+      .then((data) => setLigas(data))
+      .catch((err) => console.error("Error al obtener las ligas:", err));
   }, []);
 
-  useEffect(() => {
-    if (selectedHero) {
-      const hero = heroes.find(h => h._id === selectedHero);
-      if (hero) {
-        setNombre(hero.nombre);
-        setEdad(String(hero.edad));
-        setIdentidadSecreta(hero.identidad_secreta);
-        setPoderes(hero.poderes.join(', '));
-      }
-    }
-  }, [selectedHero, heroes]);
+  const filteredLigas = ligas.filter((liga) =>
+    liga.nombre.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-  const editarHeroe = () => {
-    fetch(`http://localhost:3000/api/superhero/${selectedHero}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        nombre: nombre,
-        edad: parseInt(edad),
-        identidad_secreta: identidadSecreta,
-        poderes: poderes.split(',').map(p => p.trim())
-      })
+  const handleSelectLiga = (liga: Liga) => {
+    setSelectedLiga(liga);
+  };
+
+  const handleAddHero = () => {
+    if (newHero.trim() === "") return;
+    const nuevoMiembro: Superhero = { _id: Date.now().toString(), nombre: newHero };
+    setSelectedLiga((prevLiga) => prevLiga ? { ...prevLiga, miembros: [...prevLiga.miembros, nuevoMiembro] } : null);
+    setNewHero("");
+  };
+
+  const handleRemoveHero = (heroId: string) => {
+    setSelectedLiga((prevLiga) =>
+      prevLiga ? { ...prevLiga, miembros: prevLiga.miembros.filter((m) => m._id !== heroId) } : null
+    );
+  };
+
+  const handleSaveChanges = () => {
+    if (!selectedLiga) return;
+
+    fetch(`http://192.168.1.67:3000/api/liga/${selectedLiga._id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ miembros: selectedLiga.miembros }),
     })
-      .then(response => response.json())
-      .then(data => {
-        Alert.alert("Héroe editado con éxito");
-      })
-      .catch((error) => {
-        Alert.alert('Error', 'El Héroe no pudo ser editado');
-      });
+      .then((response) => response.json())
+      .then(() => Alert.alert("Éxito", "Liga actualizada correctamente"))
+      .catch((err) => console.error("Error al guardar cambios:", err));
   };
 
   return (
-    <LinearGradient colors={['#0f0c29', '#302b63', '#24243e']} style={styles.background}>
-      <View style={styles.container}>
+    <LinearGradient colors={["#0f0c29", "#302b63", "#24243e"]} style={styles.background}>
+      <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.headerContainer}>
-          <Text style={styles.headerTitle}>Editar Superhéroe</Text>
+          <Text style={styles.headerTitle}>Editar Liga</Text>
         </View>
-        <View style={styles.formContainer}>
-          <DropDownPicker
-            open={open}
-            value={selectedHero}
-            items={items}
-            setOpen={setOpen}
-            setValue={setSelectedHero}
-            setItems={setItems}
-            placeholder="Seleccione un héroe"
-            containerStyle={styles.pickerContainer}
-            style={styles.picker}
-            dropDownContainerStyle={styles.dropDownContainer}
-          />
-          <View style={styles.inputContainer}>
-            <TextInput
-              mode="outlined"
-              label="Nombre"
-              textColor={'#000000'}
-
-              value={nombre}
-              onChangeText={setNombre}
-              theme={{ colors: { text: '#000000', primary: '#6200EE', background: '#FFFFFF', placeholder: '#000000' } }}
+        {!selectedLiga ? (
+          <View style={styles.formContainer}>
+            <Searchbar
+              placeholder="Buscar liga..."
+              onChangeText={setSearchQuery}
+              value={searchQuery}
+              style={styles.searchbar}
             />
+            {filteredLigas.map((liga) => (
+              <TouchableOpacity key={liga._id} style={styles.ligaContainer} onPress={() => handleSelectLiga(liga)}>
+                <Text style={styles.ligaName}>{liga.nombre}</Text>
+              </TouchableOpacity>
+            ))}
           </View>
-          <View style={styles.inputContainer}>
+        ) : (
+          <View style={styles.formContainer}>
+            <Text style={styles.ligaTitle}>Editando: {selectedLiga.nombre}</Text>
+            <Text style={styles.ligaDetail}>Miembros:</Text>
+            {selectedLiga.miembros.map((miembro) => (
+              <View key={miembro._id} style={styles.heroRow}>
+                <Text style={styles.heroName}>{miembro.nombre}</Text>
+                <TouchableOpacity onPress={() => handleRemoveHero(miembro._id)}>
+                  <Text style={styles.removeButton}>Eliminar</Text>
+                </TouchableOpacity>
+              </View>
+            ))}
             <TextInput
-              mode="outlined"
-              label="Identidad Secreta"
-              value={identidadSecreta}
-              textColor={'#000000'}
-              onChangeText={setIdentidadSecreta}
-              theme={{ colors: {  primary: '#6200EE', background: '#FFFFFF', placeholder: '#000000' } }}
+              style={styles.input}
+              placeholder="Nuevo héroe..."
+              value={newHero}
+              onChangeText={setNewHero}
             />
+            <Button mode="contained" onPress={handleAddHero} style={styles.addButton}>
+              Agregar Héroe
+            </Button>
+            <Button mode="contained" onPress={handleSaveChanges} style={styles.saveButton}>
+              Guardar Cambios
+            </Button>
           </View>
-          <View style={styles.inputContainer}>
-            <TextInput
-              mode="outlined"
-              label="Edad"
-              value={edad}
-              onChangeText={setEdad}
-              textColor={'#000000'}
-              keyboardType="numeric"
-              theme={{ colors: { text: '#000000', primary: '#6200EE', background: '#FFFFFF', placeholder: '#000000' } }}
-            />
-          </View>
-          <Text style={styles.poderText}>Separa los poderes por comas</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              mode="outlined"
-              label="Poderes"
-              value={poderes}
-              textColor={'#000000'}
-              onChangeText={setPoderes}
-              theme={{ colors: { text: '#000000', primary: '#6200EE', background: '#FFFFFF', placeholder: '#000000' } }}
-            />
-          </View>
-          <TouchableOpacity style={styles.button} onPress={editarHeroe}>
-            <Text style={styles.buttonText}>Editar Héroe</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+        )}
+      </ScrollView>
     </LinearGradient>
   );
 }
@@ -150,59 +115,74 @@ export default function EHero() {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    borderRadius: 15,
   },
   container: {
     flexGrow: 1,
     padding: 20,
+    paddingBottom: 80,
   },
   headerContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 20,
   },
   headerTitle: {
     fontSize: 28,
-    fontWeight: 'bold',
-    color: '#ffffff',
+    fontWeight: "bold",
+    color: "#ffffff",
   },
   formContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
     padding: 20,
     borderRadius: 15,
   },
-  pickerContainer: {
-    marginVertical: 10,
-    zIndex: 1000,
-  },
-  picker: {
-    backgroundColor: '#f0f0f0',
+  searchbar: {
+    marginBottom: 15,
     borderRadius: 10,
   },
-  dropDownContainer: {
-    backgroundColor: '#f0f0f0',
+  ligaContainer: {
+    padding: 15,
+    marginBottom: 10,
+    backgroundColor: "rgba(245, 245, 245, 1)",
     borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#ddd",
   },
-  inputContainer: {
-    marginVertical: 10,
-  },
-  poderText: {
-    fontSize: 16,
-    marginLeft: 13,
-    marginTop: 8,
-    fontWeight: '500',
-    color: '#333',
-  },
-  button: {
-    backgroundColor: '#f0c14b',
-    borderRadius: 25,
-    marginTop: 20,
-    padding: 12,
-    alignItems: 'center',
-  },
-  buttonText: {
+  ligaName: {
     fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#000',
+    fontWeight: "bold",
+  },
+  ligaTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  ligaDetail: {
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  heroRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 5,
+  },
+  heroName: {
+    fontSize: 16,
+  },
+  removeButton: {
+    color: "red",
+    fontWeight: "bold",
+  },
+  input: {
+    backgroundColor: "#f0f0f0",
+    padding: 10,
+    borderRadius: 8,
+    marginTop: 10,
+  },
+  addButton: {
+    marginTop: 10,
+  },
+  saveButton: {
+    marginTop: 20,
+    backgroundColor: "#4CAF50",
   },
 });

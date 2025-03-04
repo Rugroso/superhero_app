@@ -1,94 +1,104 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
+import { 
+  StyleSheet, 
+  View, 
+  Text, 
+  TouchableOpacity, 
+  Alert, 
+  KeyboardAvoidingView, 
+  Platform 
+} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 
-interface Superhero {
+interface Liga {
   _id: string;
   nombre: string;
-  edad: number;
-  identidad_secreta: string;
-  poderes: string[];
 }
 
-export default function DHero() {
-  const [heroes, setHeroes] = useState<Superhero[]>([]);
+export default function DLiga() {
+  const [ligas, setLigas] = useState<Liga[]>([]);
   const [open, setOpen] = useState(false);
-  const [selectedHero, setSelectedHero] = useState<string>('');
+  const [selectedLiga, setSelectedLiga] = useState<string>('');
   const [items, setItems] = useState<{ label: string; value: string }[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/superhero')
+    fetch('http://192.168.1.67:3000/api/liga/superhero')
       .then(response => response.json())
-      .then((data: Superhero[]) => {
-        setHeroes(data);
-        const mappedItems = data.map(hero => ({
-          label: hero.nombre,
-          value: hero._id,
+      .then((data: Liga[]) => {
+        setLigas(data);
+        const mappedItems = data.map(liga => ({
+          label: liga.nombre,
+          value: liga._id,
         }));
         setItems(mappedItems);
         if (mappedItems.length > 0) {
-          setSelectedHero(mappedItems[0].value);
+          setSelectedLiga(mappedItems[0].value);
         }
       })
       .catch(error => {
-        console.error(error);
+        console.error('Error al obtener las ligas:', error);
+        Alert.alert('Error', 'No se pudieron cargar las ligas');
       });
   }, []);
 
-  const eliminarHeroe = () => {
-    if (!selectedHero) {
-      Alert.alert('Seleccione un héroe para eliminar');
+  const eliminarLiga = () => {
+    if (!selectedLiga) {
+      Alert.alert('Seleccione una liga para eliminar');
       return;
     }
-    fetch(`http://localhost:3000/api/superhero/${selectedHero}`, {
+    fetch(`http://192.168.1.67:3000/api/liga/superhero/${selectedLiga}`, {
       method: 'DELETE',
     })
       .then(response => {
         if (response.ok) {
-          Alert.alert("Héroe eliminado con éxito");
-          const updatedHeroes = heroes.filter(hero => hero._id !== selectedHero);
-          setHeroes(updatedHeroes);
-          const mappedItems = updatedHeroes.map(hero => ({
-            label: hero.nombre,
-            value: hero._id,
+          Alert.alert('Liga eliminada con éxito');
+          const updatedLigas = ligas.filter(liga => liga._id !== selectedLiga);
+          setLigas(updatedLigas);
+          const mappedItems = updatedLigas.map(liga => ({
+            label: liga.nombre,
+            value: liga._id,
           }));
           setItems(mappedItems);
-          setSelectedHero(mappedItems.length > 0 ? mappedItems[0].value : '');
+          setSelectedLiga(mappedItems.length > 0 ? mappedItems[0].value : '');
         } else {
-          Alert.alert("Error", "El héroe no pudo ser eliminado");
+          Alert.alert('Error', 'La liga no pudo ser eliminada');
         }
       })
       .catch(error => {
-        console.error('Error:', error);
-        Alert.alert("Error", "El héroe no pudo ser eliminado");
+        console.error('Error al eliminar la liga:', error);
+        Alert.alert('Error', 'No se pudo eliminar la liga');
       });
   };
 
   return (
     <LinearGradient colors={['#0f0c29', '#302b63', '#24243e']} style={styles.background}>
-      <View style={styles.container}>
-        <View style={styles.headerContainer}>
-          <Text style={styles.headerTitle}>Eliminar Superhéroe</Text>
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === "ios" ? "padding" : "height"} 
+        style={{ flex: 1 }}
+      >
+        <View style={styles.container}>
+          <Text style={styles.headerTitle}>Eliminar Liga</Text>
+          <View style={[styles.formContainer, { zIndex: 2000 }]}>
+            <DropDownPicker
+              open={open}
+              value={selectedLiga}
+              items={items}
+              setOpen={setOpen}
+              setValue={setSelectedLiga}
+              setItems={setItems}
+              placeholder="Seleccione una liga"
+              containerStyle={styles.pickerContainer}
+              style={styles.picker}
+              dropDownContainerStyle={styles.dropDownContainer}
+              keyboardShouldPersistTaps="handled"
+            />
+            <TouchableOpacity style={styles.button} onPress={eliminarLiga}>
+              <Text style={styles.buttonText}>Eliminar Liga</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.formContainer}>
-          <DropDownPicker
-            open={open}
-            value={selectedHero}
-            items={items}
-            setOpen={setOpen}
-            setValue={setSelectedHero}
-            setItems={setItems}
-            placeholder="Seleccione un héroe"
-            containerStyle={styles.pickerContainer}
-            style={styles.picker}
-            dropDownContainerStyle={styles.dropDownContainer}
-          />
-          <TouchableOpacity style={styles.button} onPress={eliminarHeroe}>
-            <Text style={styles.buttonText}>Eliminar Héroe</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      </KeyboardAvoidingView>
     </LinearGradient>
   );
 }
@@ -99,26 +109,24 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   container: {
-    flexGrow: 1,
+    flex: 1,
     padding: 20,
-  },
-  headerContainer: {
-    alignItems: 'center',
-    marginBottom: 20,
   },
   headerTitle: {
     fontSize: 28,
     fontWeight: 'bold',
     color: '#ffffff',
+    textAlign: 'center',
+    marginBottom: 20,
   },
   formContainer: {
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     padding: 20,
     borderRadius: 15,
+    zIndex: 2000,
   },
   pickerContainer: {
     marginVertical: 10,
-    zIndex: 1000,
   },
   picker: {
     backgroundColor: '#f0f0f0',

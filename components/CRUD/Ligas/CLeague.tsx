@@ -1,99 +1,100 @@
-import React from 'react';
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
-import { TextInput } from 'react-native-paper';
-import { LinearGradient } from 'expo-linear-gradient';
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import { Checkbox, TextInput } from "react-native-paper";
+import { LinearGradient } from "expo-linear-gradient";
 
-export default function CHero() {
-  const [nombre, setNombre] = React.useState("");
-  const [edad, setEdad] = React.useState("");
-  const [identidadSecreta, setIdentidadSecreta] = React.useState("");
-  const [poderes, setPoderes] = React.useState("");
+export default function CLiga() {
+  const [nombre, setNombre] = useState("");
+  const [heroes, setHeroes] = useState([]);
+  const [selectedHeroes, setSelectedHeroes] = useState({});
 
-  const registrarHeroe = () => {
-    console.log("Nombre:", nombre);
-    console.log("Edad:", edad);
-    console.log("Identidad Secreta:", identidadSecreta);
-    console.log("Poderes:", poderes);
-    fetch('http://localhost:3000/api/superhero', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        nombre: nombre,
-        edad: parseInt(edad),
-        identidad_secreta: identidadSecreta,
-        poderes: poderes.split(',').map(p => p.trim())
+  useEffect(() => {
+    fetch("http://192.168.1.67:3000/api/superhero")
+      .then((response) => response.json())
+      .then((data) => {
+        setHeroes(data);
+        const initialSelections = {};
+        data.forEach(hero => {
+          initialSelections[hero._id] = false;
+        });
+        setSelectedHeroes(initialSelections);
       })
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Success:', data);
-        Alert.alert("Héroe registrado con éxito");
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        Alert.alert('Error', 'El Héroe no pudo ser registrado', [
-          {
-            text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel',
-          },
-        ]);
+      .catch((error) => console.error("Error al obtener héroes:", error));
+  }, []);
+
+  const toggleHeroSelection = (heroId) => {
+    setSelectedHeroes((prevSelected) => ({
+      ...prevSelected,
+      [heroId]: !prevSelected[heroId],
+    }));
+  };
+
+  const registrarLiga = async () => {
+    if (!nombre.trim()) {
+      Alert.alert("Error", "Por favor, ingresa el nombre de la liga.");
+      return;
+    }
+
+    const miembrosArray = Object.keys(selectedHeroes).filter(id => selectedHeroes[id]);
+    if (miembrosArray.length === 0) {
+      Alert.alert("Error", "Debe seleccionar al menos un héroe para la liga.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://192.168.1.67:3000/api/liga/superhero", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre, miembros: miembrosArray }),
       });
+
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${await response.text()}`);
+      }
+
+      Alert.alert("Éxito", "Liga registrada con éxito.");
+      setNombre("");
+      setSelectedHeroes({});
+    } catch (error) {
+      console.error("Error al registrar la liga:", error);
+      Alert.alert("Error", error.message);
+    }
   };
 
   return (
-    <LinearGradient colors={['#0f0c29', '#302b63', '#24243e']} style={styles.background}>
+    <LinearGradient colors={["#0f0c29", "#302b63", "#24243e"]} style={styles.background}>
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.headerContainer}>
-          <Text style={styles.headerTitle}>Nuevo Superhéroe</Text>
+          <Text style={styles.headerTitle}>Nueva Liga</Text>
         </View>
         <View style={styles.formContainer}>
-          <View style={styles.inputContainer}>
-            <TextInput
-              mode="outlined"
-              label="Nombre"
-              value={nombre}
-              onChangeText={setNombre}
-              textColor={'#000000'}
-              theme={{ colors: { text: 'black', primary: '#6200EE', background: 'white' } }}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <TextInput
-              mode="outlined"
-              label="Identidad Secreta"
-              value={identidadSecreta}
-              onChangeText={setIdentidadSecreta}
-              textColor={'#000000'}
-              theme={{ colors: { text: 'black', primary: '#6200EE', background: 'white' } }}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <TextInput
-              mode="outlined"
-              label="Edad"
-              value={edad}
-              onChangeText={setEdad}
-              keyboardType="numeric"
-              textColor={'#000000'}
-              theme={{ colors: { text: 'black', primary: '#6200EE', background: 'white' } }}
-            />
-          </View>
-          <Text style={styles.poderText}>Separa los poderes por comas</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              mode="outlined"
-              label="Poderes"
-              value={poderes}
-              onChangeText={setPoderes}
-              textColor={'#000000'}
-              theme={{ colors: { text: 'black', primary: '#6200EE', background: 'white' } }}
-            />
-          </View>
-          <TouchableOpacity style={styles.button} onPress={registrarHeroe}>
-            <Text style={styles.buttonText}>Registrar Héroe</Text>
+          <TextInput
+            mode="outlined"
+            label="Nombre de la Liga"
+            value={nombre}
+            onChangeText={setNombre}
+            textColor={"#000000"}
+            theme={{ colors: { text: "black", primary: "#6200EE", background: "white" } }}
+          />
+          <Text style={styles.subTitle}>Selecciona los héroes:</Text>
+          {heroes.map((hero) => (
+            <View key={hero._id} style={styles.checkboxContainer}>
+              <Checkbox
+                status={selectedHeroes[hero._id] ? "checked" : "unchecked"}
+                onPress={() => toggleHeroSelection(hero._id)}
+              />
+              <Text style={styles.checkboxLabel}>{hero.nombre}</Text>
+            </View>
+          ))}
+          <TouchableOpacity style={styles.button} onPress={registrarLiga}>
+            <Text style={styles.buttonText}>Registrar Liga</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -102,49 +103,14 @@ export default function CHero() {
 }
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    borderRadius: 15,
-  },
-  container: {
-    flexGrow: 1,
-    padding: 20,
-  },
-  headerContainer: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  headerTitle: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#ffffff',
-  },
-  formContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    padding: 20,
-    borderRadius: 15,
-  },
-  inputContainer: {
-    marginVertical: 10,
-  },
-  poderText: {
-    fontSize: 16,
-    marginLeft: 13,
-    marginTop: 8,
-    fontWeight: '500',
-    color: '#333',
-  },
-  button: {
-    backgroundColor: '#f0c14b',
-    borderRadius: 25,
-    marginTop: 20,
-    padding: 12,
-    alignItems: 'center',
-  },
-  buttonText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#000',
-  },
+  background: { flex: 1 },
+  container: { flexGrow: 1, padding: 20 },
+  headerContainer: { alignItems: "center", marginBottom: 20 },
+  headerTitle: { fontSize: 28, fontWeight: "bold", color: "#ffffff" },
+  formContainer: { backgroundColor: "rgba(255, 255, 255, 0.95)", padding: 20, borderRadius: 15 },
+  subTitle: { fontSize: 18, fontWeight: "bold", marginVertical: 10 },
+  checkboxContainer: { flexDirection: "row", alignItems: "center", marginVertical: 5 },
+  checkboxLabel: { fontSize: 16, marginLeft: 8 },
+  button: { backgroundColor: "#f0c14b", borderRadius: 25, marginTop: 20, padding: 12, alignItems: "center" },
+  buttonText: { fontSize: 18, fontWeight: "bold", color: "#000" },
 });

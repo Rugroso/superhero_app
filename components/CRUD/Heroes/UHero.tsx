@@ -24,7 +24,7 @@ export default function EHero() {
   const [poderes, setPoderes] = useState("");
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/superhero')
+    fetch('http://192.168.1.67:3000/api/superhero')
       .then(response => response.json())
       .then((data: Superhero[]) => {
         setHeroes(data);

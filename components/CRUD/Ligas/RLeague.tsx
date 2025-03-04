@@ -1,7 +1,7 @@
-import React from 'react';
-import { StyleSheet, View, Text, ScrollView } from 'react-native';
-import { Searchbar } from 'react-native-paper';
-import { LinearGradient } from 'expo-linear-gradient';
+import React, { useEffect, useState } from "react";
+import { StyleSheet, View, Text, ScrollView } from "react-native";
+import { Searchbar } from "react-native-paper";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface Superhero {
   _id: string;
@@ -11,56 +11,77 @@ interface Superhero {
   poderes: string[];
 }
 
-export default function CHero() {
-  const [superheroes, setSuperheroes] = React.useState([] as Superhero[]);
-  const [searchQuery, setSearchQuery] = React.useState('');
+interface Liga {
+  _id: string;
+  nombre: string;
+  miembros: Superhero[]; // Aseguramos que es un array de objetos, no solo IDs
+}
 
-  React.useEffect(() => {
-    fetch('http://localhost:3000/api/superhero')
-      .then(response => response.json())
-      .then(data => {
-        setSuperheroes(data);
+export default function CLigas() {
+  const [ligas, setLigas] = useState<Liga[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("http://192.168.1.67:3000/api/liga/superhero")
+      .then(async (response) => {
+        if (!response.ok) {
+          const errorMessage = await response.text();
+          throw new Error(`Error ${response.status}: ${errorMessage}`);
+        }
+        return response.json();
       })
-      .catch(error => {
-        console.error(error);
+      .then((data) => {
+        console.log("Ligas obtenidas:", data);
+        setLigas(data);
+      })
+      .catch((err) => {
+        console.error("Error al obtener las ligas:", err);
+        setError(err.message);
       });
   }, []);
 
-  const filteredSuperheroes = superheroes.filter(superhero =>
-    superhero.nombre.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    superhero.identidad_secreta.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    superhero.poderes.some(poder => poder.toLowerCase().includes(searchQuery.toLowerCase()))
+  const filteredLigas = ligas.filter((liga) =>
+    liga.nombre.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
-    <LinearGradient colors={['#0f0c29', '#302b63', '#24243e']} style={styles.background}>
+    <LinearGradient colors={["#0f0c29", "#302b63", "#24243e"]} style={styles.background}>
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.headerContainer}>
-          <Text style={styles.headerTitle}>Consultar Superhéroe</Text>
+          <Text style={styles.headerTitle}>Consultar Ligas</Text>
         </View>
         <View style={styles.formContainer}>
-            <View style={styles.searchContainer}>
+          <View style={styles.searchContainer}>
             <Searchbar
-              placeholder="Buscar superhéroe..."
+              placeholder="Buscar liga..."
               onChangeText={setSearchQuery}
               value={searchQuery}
               style={styles.searchbar}
               placeholderTextColor="gray"
-              inputStyle={{ color: 'gray' }}
+              inputStyle={{ color: "gray" }}
             />
-            </View>
-          <View style={styles.heroList}>
-            {filteredSuperheroes.length > 0 ? (
-              filteredSuperheroes.map((superhero) => (
-                <View key={superhero._id} style={styles.heroContainer}>
-                  <Text style={styles.heroName}>{superhero.nombre}</Text>
-                  <Text style={styles.heroDetail}>Edad: {superhero.edad}</Text>
-                  <Text style={styles.heroDetail}>Identidad: {superhero.identidad_secreta}</Text>
-                  <Text style={styles.heroDetail}>Poderes: {superhero.poderes.join(', ')}</Text>
+          </View>
+          {error && <Text style={styles.errorText}>Error: {error}</Text>}
+          <View style={styles.ligaList}>
+            {filteredLigas.length > 0 ? (
+              filteredLigas.map((liga) => (
+                <View key={liga._id} style={styles.ligaContainer}>
+                  <Text style={styles.ligaName}>{liga.nombre}</Text>
+                  <Text style={styles.ligaDetail}>Miembros:</Text>
+                  {liga.miembros.length > 0 ? (
+                    liga.miembros.map((miembro) => (
+                      <Text key={miembro._id} style={styles.heroName}>
+                        - {miembro.nombre}
+                      </Text>
+                    ))
+                  ) : (
+                    <Text style={styles.noResults}>No hay miembros en esta liga</Text>
+                  )}
                 </View>
               ))
             ) : (
-              <Text style={styles.noResults}>No se encontraron superhéroes</Text>
+              <Text style={styles.noResults}>No se encontraron ligas</Text>
             )}
           </View>
         </View>
@@ -77,64 +98,72 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 20,
-    paddingBottom:80
+    paddingBottom: 80,
   },
   headerContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 20,
   },
   headerTitle: {
     fontSize: 28,
-    fontWeight: 'bold',
-    color: '#ffffff',
+    fontWeight: "bold",
+    color: "#ffffff",
   },
   formContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
     padding: 20,
     borderRadius: 15,
   },
   searchContainer: {
     marginBottom: 15,
     paddingHorizontal: 10,
-    color: 'white',
   },
   searchbar: {
     elevation: 5,
     borderRadius: 10,
-    backgroundColor: '#fff',
-    color: 'white',
+    backgroundColor: "#fff",
   },
-  heroList: {
+  ligaList: {
     marginTop: 10,
   },
-  heroContainer: {
+  ligaContainer: {
     padding: 15,
     marginBottom: 10,
-    backgroundColor: 'rgba(245, 245, 245, 1)',
+    backgroundColor: "rgba(245, 245, 245, 1)",
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#ddd',
-    shadowColor: '#000',
+    borderColor: "#ddd",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
-    elevation: 5, 
+    elevation: 5,
   },
-  heroName: {
+  ligaName: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
-    color: '#1a1a1a',
+    color: "#1a1a1a",
   },
-  heroDetail: {
+  ligaDetail: {
     fontSize: 16,
     marginBottom: 3,
-    color: '#333333',
+    color: "#333333",
+  },
+  heroName: {
+    fontSize: 14,
+    color: "#444",
   },
   noResults: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 16,
-    color: '#333333',
+    color: "#333333",
     marginTop: 20,
+  },
+  errorText: {
+    textAlign: "center",
+    fontSize: 16,
+    color: "red",
+    marginTop: 10,
   },
 });

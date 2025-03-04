@@ -14,7 +14,7 @@ export default function CHero() {
     console.log("Edad:", edad);
     console.log("Identidad Secreta:", identidadSecreta);
     console.log("Poderes:", poderes);
-    fetch('http://localhost:3000/api/superhero', {
+    fetch('http://192.168.1.67:3000/api/superhero', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
